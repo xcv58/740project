@@ -1,0 +1,5 @@
+.DS_Store
+tweets.csv
+/trainingandtestdata
+*.class
+*.jar
