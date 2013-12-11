@@ -24,9 +24,6 @@ import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.process.PTBTokenizer;
 
-import org.apache.commons.collections.iterators.EntrySetMapIterator;
-import org.apache.hadoop.fs.shell.Count;
-
 public class Constructor {
 
 	private final static Pattern findTweet = Pattern
