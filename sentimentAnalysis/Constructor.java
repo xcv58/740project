@@ -58,7 +58,6 @@ public class Constructor {
 	public Constructor() {
 		this.allTokenHashMap = new HashMap<String, Integer>();
 		this.categoryMap = new HashMap<String, HashMap<String, Integer>>();
-		
 	}
 	
 	
@@ -87,15 +86,15 @@ public class Constructor {
 			this.categoryMap.put(CategoryName, tmpCategoryMap);
 		}
 		for (String oneToken : tokenList) {
-			Integer intForAll = this.allTokenHashMap.get(oneToken);
-			if (intForAll == null) {
-				this.allTokenHashMap.put(oneToken, new Integer(1));
-			} else {
-				this.allTokenHashMap.put(oneToken, intForAll + 1);
-			}
 			Integer intForCategory = tmpCategoryMap.get(oneToken);
 			if (intForCategory == null) {
 				tmpCategoryMap.put(oneToken, new Integer(1));
+				Integer intForAll = this.allTokenHashMap.get(oneToken);
+				if (intForAll == null) {
+					this.allTokenHashMap.put(oneToken, new Integer(1));
+				} else {
+					this.allTokenHashMap.put(oneToken, intForAll + 1);
+				}
 			} else {
 				tmpCategoryMap.put(oneToken, intForCategory + 1);
 			}
@@ -127,7 +126,8 @@ public class Constructor {
 	private void countTFIDF(CalculateSentiment cal) {
 		long allTokenNumber = 0;
 		long allTokenCount = 0;
-		HashMap<String, HashMap<String,Float>> finalMap = new HashMap<String, HashMap<String,Float>>(this.categoryMap.size());
+		int categorySize = this.categoryMap.size();
+		HashMap<String, HashMap<String,Float>> finalMap = new HashMap<String, HashMap<String,Float>>(categorySize);
 		allTokenNumber = this.allTokenHashMap.size();
 		Iterator e = this.allTokenHashMap.values().iterator();
 		while(e.hasNext())
