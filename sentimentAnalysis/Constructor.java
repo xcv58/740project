@@ -198,6 +198,9 @@ public class Constructor {
 					if (line.startsWith("all ")) {
 						line = line.substring(4);
 					}
+					if (line.contains("laptops")) {
+						line = "laptops";
+					}
 					tmpCategoryName = line;
 					isproduct = true;
 					br.readLine();
