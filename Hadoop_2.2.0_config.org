@@ -43,7 +43,13 @@
            <name>mapreduce.framework.name</name>
            <value>yarn</value>
         </property>
-         
+
+				You can assign more memory be editing the conf/mapred-site.xml file and adding the property:
+
+				<property>
+				<name>mapred.child.java.opts</name>
+				<value>-Xmx1024m</value>
+				</property>
          
         $ cd ~
         $ mkdir -p mydata/hdfs/namenode

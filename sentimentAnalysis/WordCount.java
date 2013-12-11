@@ -18,7 +18,6 @@
 package CalculateSentiment;
 
 import java.util.StringTokenizer;
-import java.util.HashMap;
 import java.util.Random;
 import java.net.URI;
 // import java.io.IOException;
@@ -43,24 +42,27 @@ import org.apache.hadoop.filecache.DistributedCache;
 public class WordCount {
 
     public static class TokenizerMapper 
-	extends Mapper<Object, Text, Text, DoubleWritable>{
+	extends Mapper<Object, Text, Text, Text>{
     
-	private final static DoubleWritable one = new DoubleWritable(1.2345);
 	private Text word = new Text();
-	private HashMap<String, String> hashmap = new HashMap<String, String>();
+	private CalculateSentiment cal = WordCount.read("object");
 	
 	public void map(Object key, Text value, Context context
 			) throws IOException, InterruptedException {
 	    String line = value.toString().toLowerCase();
 	    // CalculateSentiment cal = context.getConfiguration().get("category");
-	    CalculateSentiment cal = WordCount.read("object");
 
-	    word.set(line);
-	    String result = cal.judgeOneTweer("", line);
-	    double doubleResult = Double.parseDouble(result);
-	    DoubleWritable finalResult = new DoubleWritable(doubleResult);
-
-	    context.write(word, finalResult);
+			String categoryName = context.getConfiguration().get("category");
+			categoryName = categoryName.toLowerCase();
+			word.set(line);
+			double result = cal.judgeOneTweer(categoryName, line);
+			// double result = 1;
+			// double result = 1;
+			// double doubleResult = Double.parseDouble(result);
+			if (result > 0) {
+				//DoubleWritable finalResult = new DoubleWritable(doubleResult);
+				context.write(new Text(Double.toString(result)), word);
+			}
 	    // StringTokenizer itr = new StringTokenizer(line);
 	    // while (itr.hasMoreTokens()) {
 	    // 	String tmpToken = itr.nextToken();
@@ -76,18 +78,24 @@ public class WordCount {
     }
   
     public static class DoubleSumReducer 
-	extends Reducer<Text,DoubleWritable,Text,DoubleWritable> {
-	private DoubleWritable result = new DoubleWritable();
+	// extends Reducer<Text,DoubleWritable,Text,DoubleWritable> {
+	extends Reducer<Text,Text,Text,Text> {
+	// private DoubleWritable result = new DoubleWritable();
 
-	public void reduce(Text key, Iterable<DoubleWritable> values, 
+	public void reduce(Text key, Iterable<Text> values, 
 			   Context context
 			   ) throws IOException, InterruptedException {
 	    double sum = 0;
-	    for (DoubleWritable val : values) {
-		sum += val.get();
-	    }
-	    result.set(sum);
-	    context.write(key, result);
+			// for (DoubleWritable val : values) {
+			// 	sum += val.get();
+			// }
+			for (Text tmpResult : values) {
+				Text result = new Text(tmpResult);
+				context.write(result, key);
+			}
+	    // result.set(sum);
+	    // context.write(key, result);
+			// context.write(result, key);
 	}
     }
     
@@ -143,7 +151,7 @@ public class WordCount {
 	job.setCombinerClass(DoubleSumReducer.class);
 	job.setReducerClass(DoubleSumReducer.class);
 	job.setOutputKeyClass(Text.class);
-	job.setOutputValueClass(DoubleWritable.class);
+	job.setOutputValueClass(Text.class);
 	job.setNumReduceTasks(1);
 	FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 	FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
