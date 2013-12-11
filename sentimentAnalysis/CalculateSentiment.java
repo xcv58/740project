@@ -57,7 +57,8 @@ public class CalculateSentiment implements Serializable {
 			result = replaceMatcher.replaceAll("");
 		}
 		result = StringEscapeUtils.unescapeCsv(result);
-		return line;
+		result = StringEscapeUtils.unescapeXml(result);
+		return result;
 	}
 	
 	private boolean isCategory (String categoryName, String tweet) {
@@ -72,17 +73,22 @@ public class CalculateSentiment implements Serializable {
 		if (categoryMap == null) {
 			return false;
 		}
+		HashSet<String> dupSet = new HashSet<String>();
 		while (tokens.hasMoreTokens()) {
 			String tmpToken = tokens.nextToken();
+			if (dupSet.contains(tmpToken)) {
+				continue;
+			}
+			dupSet.add(tmpToken);
 			if (categoryMap.containsKey(tmpToken)) {
+				System.out.println(tmpToken);
 				matchSum++;
 				float tmpScore = categoryMap.get(tmpToken);
+				System.out.println(tmpScore);
 				matchScore += tmpScore;
 			}
 		}
-		if (matchScore > this.leastTokens) {
-			return true;
-		} else if (matchSum > 3) {
+		if ((matchScore / matchSum) >= this.leastTokens && matchSum > 1) {
 			return true;
 		} else {
 			return false;
@@ -92,6 +98,7 @@ public class CalculateSentiment implements Serializable {
 	public double judgeOneTweer (String categoryName, String tweet) {
 		//TODO: judge tweet is a description of this category
 		String tmpTweet = this.preprocessing(tweet);
+		System.out.println(tmpTweet);
 		if (categoryName.equals("") || categoryName.isEmpty() || categoryName == null) {
 			double score = this.calculateSentiment(tmpTweet.split("\\s+"));
 			return score;

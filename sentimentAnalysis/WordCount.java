@@ -85,7 +85,7 @@ public class WordCount {
 	public void reduce(Text key, Iterable<Text> values, 
 			   Context context
 			   ) throws IOException, InterruptedException {
-	    double sum = 0;
+	    // double sum = 0;
 			// for (DoubleWritable val : values) {
 			// 	sum += val.get();
 			// }

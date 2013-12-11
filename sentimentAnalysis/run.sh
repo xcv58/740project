@@ -4,6 +4,7 @@ javac -classpath $HADOOP_INSTALL/share/hadoop/common/hadoop-common-2.2.0.jar:$HA
 jar -cvf a.jar  CalculateSentiment
 hadoop fs -rm -r output
 hadoop fs -put -f CalculateSentiment.obj CalculateSentiment.obj
+# hadoop jar ./a.jar CalculateSentiment.WordCount tweets.txt output tablet
 hadoop jar ./a.jar CalculateSentiment.WordCount tweets.txt output laptops
 # hadoop jar ./a.jar CalculateSentiment.WordCount test.txt output laptops
-hadoop fs -cat output/part-r-00000
+hadoop fs -cat output/part-r-00000 > ~/temp.out
