@@ -88,7 +88,7 @@ public class CalculateSentiment implements Serializable {
 				matchScore += tmpScore;
 			}
 		}
-		if ((matchScore / matchSum) >= this.leastTokens && matchSum > 1) {
+		if ((matchScore / matchSum) >= this.leastTokens && matchSum > 2) {
 			return true;
 		} else {
 			return false;

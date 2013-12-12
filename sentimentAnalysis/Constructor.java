@@ -155,7 +155,7 @@ public class Constructor {
 				Integer countInAll = this.allTokenHashMap.get(tmpToken);
 				float tmpTFIDF = countInCategory * allTokenCount / tmpAllToken / countInAll;
 				tmpHashMap.put(tmpToken, tmpTFIDF);
-				System.out.println(tmpToken + ": " + tmpTFIDF + "= / " + tmpAllToken + "*"+ countInCategory + " * " + allTokenCount + " / " + countInAll );
+//				System.out.println(tmpToken + ": " + tmpTFIDF + "= / " + tmpAllToken + "*"+ countInCategory + " * " + allTokenCount + " / " + countInAll );
 			}
 			finalMap.put(tmpCategoryName, tmpHashMap);
 		}
@@ -197,6 +197,15 @@ public class Constructor {
 					}
 					if (line.contains("laptops")) {
 						line = "laptops";
+					}
+					if (line.contains("tvs")) {
+						line = "tvs";
+					}
+					if (line.contains("headphones")) {
+						line = "headphones";
+					}
+					if (line.contains("cell phone")) {
+						line = "cell_phone";
 					}
 					tmpCategoryName = line;
 					isproduct = true;
